@@ -24,20 +24,30 @@ def graf_generator():
     return graf
 
 def dfs(graph, start, finish):
-    lenght = len(graph)
-    is_visited = [False] * lenght
-    parent = [-1] * lenght
-    cost = 0
-
-    for i in range(start, lenght):
-        for j in range(len(graph[i])):
-            if graph[i][j] == finish:
-                cost = 1
-                return cost
+    path = [start, finish]  # путь от старта до финиша
+    while start != finish:
+        for i in range(start, len(graph)):
+            vertex = graph[i]
+            if finish in graph[start]:
+                start = finish
+                break
+            if finish in vertex and i > start:
+                path.insert(1, i)
+                finish -= i
+                i = start
+                break
+            elif i == len(graph) - 1:
+                start = finish
+                path = []
+                break
+    path = list(set(path))
+    return path
 
 
 new_graf = graf_generator()
+#new_graf = [[1, 2], [3, 4, 5], [5], [4, 6], [], [], []] #этот граф для написания кода удобной проверки
 print(new_graf)
 
 start_vert = int(input('Введите стартовую точку: '))
-finish_vert = int(input(f'Введите точку к которой нужно прийти. Не более глубины графа = {len(new_graf)}: '))
+finish_vert = int(input(f'Введите точку к которой нужно прийти. Не более глубины графа = {len(new_graf)-1}: '))
+print (dfs(new_graf, start_vert, finish_vert))
